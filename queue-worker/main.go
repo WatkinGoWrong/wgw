@@ -8,10 +8,12 @@ import (
   	"fmt"
   _ "github.com/lib/pq"
   	"encoding/json"
+	  "time"
+
 )
 
 const (
-	host     = "localhost"
+	host     = "postgres"
 	port     = 5432
 	user     = "postgres"
 	password = "postgres_password"
@@ -25,8 +27,14 @@ func failOnError(err error, msg string) {
 }
 
 func main() {
-	conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
-	failOnError(err, "Failed to connect to RabbitMQ")
+	conn, err := amqp.Dial("amqp://guest:guest@rabbitmq:5672/")
+
+	for err != nil{
+		log.Printf("Couldn't connect to RabbitMQ - Will Retry connection in 5 Seconds")
+		time.Sleep(5 * time.Second)
+		conn, err = amqp.Dial("amqp://guest:guest@rabbitmq:5672/")
+	}
+
 	defer conn.Close()
 
 	ch, err := conn.Channel()
