@@ -37,6 +37,7 @@ services:
       - PGPASSWORD=postgres_password
       - PGPORT=5432
       - AMQPRECEIVEURL=amqp://guest:guest@rabbitmq:5672
+      
   client:
     build:
       dockerfile: Dockerfile.dev
@@ -57,3 +58,11 @@ services:
     ports:
       - 5672:5672
       - 15672:15672
+
+  queue-worker:
+    depends_on:
+      - rabbitmq
+      - postgres
+    build:
+      dockerfile: Dockerfile
+      context: ./queue-worker
