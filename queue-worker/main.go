@@ -8,8 +8,7 @@ import (
   	"fmt"
   _ "github.com/lib/pq"
   	"encoding/json"
-	  "time"
-
+	"time"
 )
 
 const (
